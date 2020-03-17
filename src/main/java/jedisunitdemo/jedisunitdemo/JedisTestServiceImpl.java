@@ -1,5 +1,6 @@
 package jedisunitdemo.jedisunitdemo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
@@ -7,10 +8,11 @@ import redis.clients.jedis.Protocol;
 
 @Service
 public class JedisTestServiceImpl implements JedisTestService {
+    @Autowired
+    JedisFactory jedisFactory;
 
     @Override
     public void sendCommand() {
-        JedisFactory jedisFactory = new JedisFactory();
         Jedis jedis = jedisFactory.build("localhost", 6379, 100);
         jedis.auth("test");
         //do something

@@ -3,10 +3,12 @@ package jedisunitdemo.jedisunitdemo;
 import com.fiftyonred.mock_jedis.MockJedis;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
 
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -24,8 +26,10 @@ public class JedisTestServiceImplTest {
 
     @Test
     public void sendCommand() {
-        Jedis jedis = new MockJedis("test");
+        Jedis jedis = Mockito.mock(Jedis.class);
+        Client client = Mockito.mock(Client.class);
         when(jedisFactory.build(anyString(), anyInt(), anyInt())).thenReturn(jedis);
+        when(jedis.getClient()).thenReturn(client);
 
         //问题：我该如何打桩jedis.auth方法
         doReturn("OK").when(jedis).auth(anyString());
